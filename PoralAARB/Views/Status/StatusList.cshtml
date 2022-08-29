@@ -1,0 +1,152 @@
+﻿@model PoralAARB.ViewModels.VmStatus
+    ViewBag.Title = "StatusList";
+}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row col-7">
+                <button class="text-black btn-md float-right">
+                    <ol class="breadcrumb float-sm-right">
+                        <li  onclick="AddNewStatus(0)">Add New Status </li>
+                    </ol>
+                </button>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <table id="example1" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Status Code</th>
+                                    <th>Status Name</th>
+                                    <th>Update</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody id="SetStatusList"></tbody>
+                            @*<tr id="LoadingStatus"></tr>*@
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @*Create A Popup Modal With Registration Form For Add Or Edit Status Record*@
+            <div class="modal fade" id="MyModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4>Add New Status</h4>
+                            <a href="#" class="close" data-dismiss="modal">&times;</a>
+                            <h4 id="ModalTitle"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form">
+                                <fieldset id="SubmitForm">
+                                    @Html.HiddenFor(m => m.Id, new { @id = "Id" })
+                                    <div class="form-group">
+                                        @Html.TextBoxFor(m => m.StatusId, new { @Id = "Statusid", @class = "form-control", @placeholder = "Status Code*" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.TextBoxFor(m => m.StatusName, new { @Id = "Statusname", @class = "form-control", @placeholder = "Status Name*" })
+                                    </div>
+                                    <div class="form-group">
+                                        <a href="#" class="btn btn-block btn-info" id="SaveStatusRecord">Save</a>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*Create A PopUp Modal For DeleteConfirmation*@
+            <div class="modal fade" id="DeleteConfirmation">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <a href="#" class="close" data-dismiss="modal">&times;</a>
+                        </div>
+                        <div class="modal-body">
+                            <h6>Are You Sure? You Want To Delete This Record.</h6>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#" class="btn btn-primary" data-dismiss="modal" id="r">Cancle</a>
+                            <a href="#" class="btn btn-danger" onclick="ConfirmDelete()">Confirm</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+  @section scripts{
+      <script>
+
+    //$("#LoadingStatus").html("Loading");
+    $.get("/Status/GetStatusList", null, DataBind);
+                function DataBind(StatusList) {
+                    var SetData = $("#SetStatusList");
+                    for (var i = 0; i < StatusList.length; i++) {
+                        var Data = "<tr class='row_" + StatusList[i].Id + "'>" +
+                            "<td>" + StatusList[i].StatusId + "</td>" +
+                            "<td>" + StatusList[i].StatusName + "</td>" +
+                            "<td>" + "<a href='#' class='btn btn-sm btn-warning' onclick='EditStatusRecord(" + StatusList[i].Id + ")'>Edit</a>" + "</td>" +
+                            "<td>" + "<a href='#' class='btn btn-sm btn-danger' onclick='DeleteStatusRecord(" + StatusList[i].Id + ")'>Delete</a>" + "</td>" +
+                            "</tr>";
+                        SetData.append(Data);
+                    }
+                }
+                function AddNewStatus(Id) {
+                    $("#form")[0].reset();
+                    $("#Id").val(0);
+                    $("#MyModal").modal();
+                }
+    //Show The Popup Modal For Edit Student Record
+
+    function EditStatusRecord(Id) {
+        var url = "/Status/GetStatusById?Id=" + Id;
+        $("#MyModal").modal();
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                var obj = JSON.parse(data);
+                $("#Id").val(obj.Id);
+                $("#Statusid").val(obj.StatusId);
+                $("#Statusname").val(obj.StatusName);  
+
+            }
+        })
+    }
+    $("#SaveStatusRecord").click(function () {
+        var data = $("#SubmitForm").serialize();
+        $.ajax({
+            type: "Post",
+            url: "/Status/SaveDataInDatabase",
+            data: data,
+            success: function (result) {
+                window.location.href = "/Status/StatusList";
+                $("#MyModal").modal("hide");
+            }
+        })
+    })
+    //Show The Popup Modal For DeleteComfirmation
+    var DeleteStatusRecord = function (Id) {
+        $("#Id").val(Id);
+        $("#DeleteConfirmation").modal("show");
+    }
+    var ConfirmDelete = function () {
+        var Id = $("#Id").val();
+        $.ajax({
+            type: "POST",
+            url: "/Status/DeleteStatusRecord?Id=" + Id,
+            success: function (result) {
+                $("#DeleteConfirmation").modal("hide");
+                $(".row_" + Id).remove();
+            }
+        })
+              }
+      </script>
+      }
+
+

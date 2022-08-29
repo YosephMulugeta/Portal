@@ -1,0 +1,164 @@
+﻿@model  List<PoralAARB.Models.Application>
+@{
+    ViewBag.Title = "CenterList";
+}
+<div class="container-fluid text-sm">
+    <div class="panel panel-heading">
+        <section class="content-header">
+            <button class="text-black btn-md">
+                <ol class="breadcrumb">
+                    <li> @Html.ActionLink("Create New Application", "Application")</li>
+                </ol>
+            </button>
+        </section>
+    </div>
+    <br />
+    <br />
+    @if (Model.Count() != 0)
+    {
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <table id="example1" class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Application No</th>
+                                        <th>Tin</th>
+                                        <th>Status</th>
+                                        <th>Fianalize</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                @foreach (var item in Model)
+                                {
+                            <tr>
+                                <td>@item.ApplicationNo</td>
+                                <td>@item.CustomerProfile.Tin</td>
+                                <td>@item.Status.StatusName</td>
+                                <td>
+                                    <a href="@Url.Action("Finalize",new {item.ApplicationNo, item.Tin,item.BranchId,item.DepartmentId,item.StatusId,item.MainServiceId ,item.ApplicationDate, item.AppointmentDate,item.Description })"><i class="text-primary">Finalize</i></a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("Edit",new {item.ApplicationNo, item.Tin,item.BranchId,item.DepartmentId,item.StatusId,item.MainServiceId ,item.ApplicationDate, item.AppointmentDate,item.Description })"><i class="text-warning">Edit</i></a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("Delete", new { id = @item.ApplicationNo })" class="text-danger">Delete</a>
+                                </td>
+                            </tr>
+                                }
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+</div>@using (Html.BeginForm("AddApplication", "Applications", FormMethod.Post))
+{
+    <section class="content">
+        @*Bootstrap Model*@
+        <div class="modal fade" id="newServiceModal">
+            <div class="modal-dialog modal-xl" style=" width: auto !important;">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient-navy">
+                        <h4>Apply for Services</h4>
+                        <a href="#" class="close" data-dismiss="modal">&times;</a>
+                    </div>
+                    <form id="NewServiceForm">
+                        <div class="modal-body">
+                            <div class="form-horizontal">
+                                <div class="row m-sm-2">
+                                    <input type="hidden" id="ApplicationNo" />
+                                    <label class="control-label col-sm-2 text-right">
+                                        Tax Identification No:
+                                    </label>
+                                    <div class="col-md-3">
+                                        <select id="tin" name="tin" class="form-control"></select>
+                                    </div>
+                                    <label class="control-label col-sm-2 text-right">
+                                        Branch:
+                                    </label>
+                                    <div class="col-md-3">
+                                        <select id="branchid" name="branchid" class="form-control"></select>
+                                    </div>
+                                </div>
+                                <div class="row m-sm-2">
+                                    <label class="control-label col-sm-2 text-right">
+                                        Department:
+                                    </label>
+                                    <div class="col-sm-3">
+                                        <select id="departmentid" name="departmentid" class="form-control"></select>
+                                    </div>
+                                    <label class="control-label col-sm-2 text-right">
+                                        Major service:
+                                    </label>
+                                    <div class="col-sm-3">
+                                        <select id="mainserviceid" name="mainserviceid" class="form-control"></select>
+                                    </div>
+                                </div>
+                                <div class="row m-sm-2">
+                                    <label class="control-label col-sm-2 text-right">
+                                        Application Date:
+                                    </label>
+                                    <div class="col-sm-3">
+                                        <input type="date" id="applicationdate" name="applicationdate" placeholder="Start Time" class="form-control" />
+                                    </div>
+                                    <label class="control-label col-md-2 text-right">
+                                        Description:
+                                    </label>
+                                    <div class="col-sm-3">
+                                        <input type="text" id="description" name="description" placeholder="Descriptions for Service Request" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row m-sm-2">
+                                    <label class="control-label col-sm-2 text-right">
+                                        Appointment Date:
+                                    </label>
+                                    <div class="col-sm-3">
+                                        <input type="datetime-local" id="appointmentdate" name="appointmentdate" placeholder="Start Time" class="form-control" />
+                                    </div>
+                                    <label class="control-label col-sm-2 text-right">
+                                        Status:
+                                    </label>
+                                    <div class="col-sm-3">
+                                        <select id="statusid" name="statusid" class="form-control"></select>
+                                    </div>
+                                </div>
+                                <div class="row m-sm-2">
+                                    <div class="row col-7 m-sm-3">
+                                        <button type="submit" class="btn btn-info">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#example1").DataTable({
+                dom: 'Bfrtip',
+                "paging": true,
+                ng: false,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        })
+    </script>
+}
+

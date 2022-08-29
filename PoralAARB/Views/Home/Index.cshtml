@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+    <div class="jumbotron text-center">
+        <div class="text-center">
+            <img src="~/FrontEnd/dist/img/llooggoo.jpg" class="rounded-circle" style="width:200px;height:200px;">
+        </div>
+        <br />
+        <h5 class="text-bold"> ውድ ደንበኛ እንኳን ወደ አዲስ አበባ ገቢዎች ቢሮ የፖርታል አገልግሎት በደህና መጡ</h5>
+        <p class="lead small">
+            @*ባሉበት ሆነው የምንሰጣቸውን አገልግሎቶች በመጠየቅ እና አገልግሎቱን ለማግኘት የሚያሰፈልጉ ቅድመ ሁኔታዎችን በቀለቀሉ ማግኘት ይችላሉ<br />
+            1. የፈለጉትን አገልግሎት ለይተው በማወቅ አገልግሎቱ የሚፈልገውን ቅድመ ሀኔታዎችን እና በቂ መረጃ ማወቅ <br />
+            2. ለአገልግሎቱ ባሉበት ሆነው በማመልከት ሲስተሙ የሚሰጣቹህን የማመልከቻ ቁጥር መያዝ <br />
+            3. ያመለከቱበትን ቁጥር በመያዝ ወደ ቅርንጫፍ መስሪያ ቤት በመሄድ የጠየቁትን አገልግሎት በቀላሉ መጨረስ ይችላሉ<br />*@
+        </p>
+        <br />
+        <button class="btn btn-outline-success btn-sm">
+            @Html.ActionLink("ለታክስ አገልግሎቶች ቅድመ ሁኔታ ለማወቅ", "Index", "MainServings")
+        </button>
+        <button class="btn btn-outline-success btn-sm">
+            @Html.ActionLink("ባሉበት ሆነው የታክስ አገልግሎት ለማመልከት", "Application", "Applications")
+        </button>
+        <button class="btn btn-outline-success btn-sm">
+            @Html.ActionLink("የታክስ ኦዲት አገልግሎት ለመከታተል", "ApplicationList", "Applications")
+        </button>
+        <button class="btn btn-outline-success btn-sm">
+            @Html.ActionLink("የካሽ ሬጂስተር መረጃን ለማወቅ", "ApplicationList", "Applications")
+        </button>
+    </div>

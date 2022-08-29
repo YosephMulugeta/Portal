@@ -1,0 +1,68 @@
+﻿@model PoralAARB.Models.CustomerProfile
+
+@{
+    ViewBag.Title = "Customer";
+}
+<br />
+<h4 class="text-center text-info">Customer Registration</h4>
+<br />
+
+<style>
+    .error {
+        color: red;
+    }
+</style>
+
+@using (Html.BeginForm("AddCustomer", "Profiles", FormMethod.Post))
+{
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row m-md-2">
+                @Html.HiddenFor(x => x.Id)
+                <label class="control-label col-md-2 text-right">
+                    Tax Identification No:
+                </label>
+                <div class="col-md-3">
+                    @Html.ValidationMessageFor(x => x.Tin, "", new { @class = "error" })
+                    @Html.TextBoxFor(x => x.Tin, new { @class = "form-control", @placeholder = "Enter Tax Identification Number (Tin)" })
+                </div>
+                <label class="control-label col-md-2 text-right">
+                    First Name:
+                </label>
+                <div class="col-md-3">
+                    @Html.ValidationMessageFor(x => x.FirstName, "", new { @class = "error" })
+                    @Html.TextBoxFor(x => x.FirstName, new { @class = "form-control", @placeholder = "Enter First Name" })
+                </div>
+            </div>
+            <div class="row m-md-2">
+                <label class="control-label col-md-2 text-right">
+                    Middle Name:
+                </label>
+                <div class="col-md-3">
+                    @Html.ValidationMessageFor(x => x.MiddleName, "", new { @class = "error" })
+                    @Html.TextBoxFor(x => x.MiddleName, new { @class = "form-control", @placeholder = "Enter Middle Name" })
+                </div>
+                <label class="control-label col-md-2 text-right">
+                    Last Name:
+                </label>
+                <div class="col-md-3">
+                    @Html.ValidationMessageFor(x => x.LastName, "", new { @class = "error" })
+                    @Html.TextBoxFor(x => x.LastName, new { @class = "form-control", @placeholder = "Enter LastName" })
+                </div>
+            </div>
+            <div class="row m-md-2">
+                <label class="control-label col-md-2 text-right">
+                    Registered Date:
+                </label>
+                <div class="col-md-3">
+                    @Html.ValidationMessageFor(x => x.RegisteredDate, "", new { @class = "error" })
+                    @Html.TextBoxFor(x => x.RegisteredDate, new { @type = "date", @class = "form-control", @placeholder = "Registration Date" })
+                </div>
+            </div>
+            <div class="row col-7 float-right">
+                <button type="submit" class="btn btn-info float-right">Submit</button>
+            </div>
+        </div>
+</section>
+        }
+

@@ -1,0 +1,43 @@
+﻿@model PoralAARB.Models.ServiceTime
+
+@{
+    ViewBag.Title = "ServiceTime";
+}
+<br />
+<h4 class="text-center text-info">Service Time Registration</h4>
+<br />
+
+<style>
+    .error {
+        color: red;
+    }
+</style>
+
+@using (Html.BeginForm("AddServiceTime", "ServiceTimes", FormMethod.Post))
+{
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row m-md-2">
+                @Html.HiddenFor(x => x.Id)
+                <label class="control-label col-md-2 text-right">
+                    Service Time Code:
+                </label>
+                <div class="col-md-3">
+                    @Html.ValidationMessageFor(x => x.ServiceTimeId, "", new { @class = "error" })
+                    @Html.TextBoxFor(x => x.ServiceTimeId, new { @class = "form-control", @placeholder = "Enter Service Time Code" })
+                </div>
+                <label class="control-label col-md-2 text-right">
+                    Service Time In Minutes:
+                </label>
+                <div class="col-md-3">
+                    @Html.ValidationMessageFor(x => x.ServiceTimeInMinutes, "", new { @class = "error" })
+                    @Html.TextBoxFor(x => x.ServiceTimeInMinutes, new { @class = "form-control", @placeholder = "Enter Service Time In Minutes" })
+                </div>
+            </div>
+            <div class="row col-7 float-right">
+                <button type="submit" class="btn btn-info float-right">Submit</button>
+            </div>
+        </div>
+</section>
+        }
+

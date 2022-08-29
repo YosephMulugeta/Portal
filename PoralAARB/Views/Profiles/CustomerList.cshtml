@@ -1,0 +1,90 @@
+﻿@model  List<PoralAARB.Models.CustomerProfile>
+@{
+    ViewBag.Title = "CenterList";
+}
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row m-sm-2">
+                <div class="col-sm-6">
+                    <button class="text-black btn-md">
+                        <ol class="breadcrumb">
+                            <li> @Html.ActionLink("Create New Customer", "Customer")</li>
+                        </ol>
+                    </button>
+                    </div>
+                    <div class="col-sm-6 ">
+                        <button class="text-black btn-md float-right">
+                            <ol class="breadcrumb">
+                                <li>
+                                    @Html.ActionLink("Create New Application", "Application", "Applications")
+                                </li>
+                            </ol>
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">                   
+                    <div class="card-body">
+                        <table id="example1" class="table table-hover table-responsive-sm">
+                            <thead>
+                                <tr>
+                                    <th>TIN</th>
+                                    <th>First Name</th>
+                                    <th>Middle Name</th>
+                                    <th>Last Name</th>
+                                    <th>Update</th>
+                                    <th>Delete</th>
+                                    <th>Apply for Service</th>
+                                </tr>
+                            </thead>
+                            @foreach (var item in Model)
+                            {
+                                <tr >
+                                    <td>@item.Tin</td>
+                                    <td>@item.FirstName</td>
+                                    <td>@item.MiddleName</td>
+                                    <td>@item.LastName</td>
+                                    <td>
+                                <a class="btn btn-sm" href="@Url.Action("Customer",new {item.Id, item.Tin,item.FirstName,item.MiddleName,item.LastName,item.RegisteredDate })"><i class="text-warning">Edit</i></a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Delete",new { id=@item.Id})"><i class="text-danger">Delete</i></a>
+                            </td>
+                            <td>
+                                @Html.ActionLink("Apply", "ApplicationList", "Applications")
+
+                            </td>
+                        </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section scripts{
+    <script>        
+       $(document).ready(function () {
+     $("#example1").DataTable({
+    dom: 'Bfrtip',
+    "paging": true,
+      ng: false,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+            })
+    </script>
+    }
+

@@ -1,0 +1,41 @@
+﻿@model PoralAARB.Models.Branch
+
+@{
+    ViewBag.Title = "Branch";
+}
+<br />
+<h4 class="text-center text-info">Branch Registration</h4>
+<br />
+<style>
+    .error {
+        color: red;
+    }
+</style>
+@using (Html.BeginForm("AddBranch", "Branches", FormMethod.Post))
+{
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row m-md-2">
+                @Html.HiddenFor(x => x.Id)
+                <label class="control-label col-md-2 text-right">
+                    Branch Code:
+                </label>
+                <div class="col-md-3">
+                    @Html.ValidationMessageFor(x => x.BranchId, "", new { @class = "error" })
+                    @Html.TextBoxFor(x => x.BranchId, new {@Type="number", @class = "form-control", @placeholder = "Enter Code of the Branch" })
+                </div>
+                <label class="control-label col-md-2 text-right">
+                    Branch Name:
+                </label>
+                <div class="col-md-3">
+                    @Html.ValidationMessageFor(x => x.BranchName, "", new { @class = "error" })
+                    @Html.TextBoxFor(x => x.BranchName, new { @class = "form-control", @placeholder = "Enter Name of the Branch" })
+                </div>
+            </div>
+            <div class="row col-7 float-right">
+                <button type="submit" class="btn btn-info float-right">Submit</button>
+            </div>
+            </div>
+</section>
+        }
+

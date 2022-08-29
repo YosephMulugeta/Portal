@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="1669fab6b6054fc6a5c5ec73391584a8" Name="Diagram1">
+        <EntityTypeShape EntityType="PortalAARBModel.Application" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PortalAARBModel.AspNetRole" Width="1.5" PointX="0.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PortalAARBModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PortalAARBModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PortalAARBModel.AspNetUser" Width="1.5" PointX="3" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PortalAARBModel.Branch" Width="1.5" PointX="3" PointY="14.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PortalAARBModel.CustomerProfile" Width="1.5" PointX="3" PointY="17.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PortalAARBModel.Department" Width="1.5" PointX="3" PointY="20.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PortalAARBModel.MainService" Width="1.5" PointX="3" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PortalAARBModel.ServiceRequirement" Width="1.5" PointX="5.25" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PortalAARBModel.ServiceTime" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PortalAARBModel.Status" Width="1.5" PointX="3" PointY="22.875" IsExpanded="true" />
+        <AssociationConnector Association="PortalAARBModel.FK_Application_Branch" ManuallyRouted="false" />
+        <AssociationConnector Association="PortalAARBModel.FK_Application_CustomerProfile" ManuallyRouted="false" />
+        <AssociationConnector Association="PortalAARBModel.FK_Application_Department" ManuallyRouted="false" />
+        <AssociationConnector Association="PortalAARBModel.FK_Application_MainService" ManuallyRouted="false" />
+        <AssociationConnector Association="PortalAARBModel.FK_Application_Status" ManuallyRouted="false" />
+        <AssociationConnector Association="PortalAARBModel.FK_MainService_AspNetRoles" ManuallyRouted="false" />
+        <AssociationConnector Association="PortalAARBModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="PortalAARBModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="PortalAARBModel.FK_MainService_ServiceTime" ManuallyRouted="false" />
+        <AssociationConnector Association="PortalAARBModel.FK_ServiceRequirement_MainService" ManuallyRouted="false" />
+        <AssociationConnector Association="PortalAARBModel.AspNetUserRoles" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

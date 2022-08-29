@@ -1,0 +1,439 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<PoralAARB.Models.MainService>
+
+<div class="container-fluid text-md">
+    <div class="card alert-default-secondary">
+        <h5 class="text-center">
+            <i>
+                የምንሰጣቸው አገልግሎቶች
+            </i>
+        </h5>
+        @if (Model.Count() != 0)
+        {
+            <div class="panel panel-body">
+                @foreach (var item in Model)
+                {
+                    <div class="card">
+                        <div class="card-header alert-default-secondary">
+                            <h6> @item.No) @item.MainServiceName</h6>
+                        </div>
+                        <div class="card-body">
+                            <ul style="list-style: none; margin-bottom:auto">
+                                <li class="card-text">ሀ)&nbsp;<strong>የአገልግሎቱ መጠሪያ</strong> &nbsp;:&nbsp;<i>@item.MainServiceName</i></li>
+                                <li class="card-text">ለ)&nbsp;<strong>አገልግሎቱን የሚሰጥበት የስራ ክፍል</strong> &nbsp;:&nbsp;<i>@item.AspNetRole.Name</i></li>
+                                <li class="card-text">ሐ)&nbsp;<strong>አገልግሎቱን ለማግኘት የሚያስፈልጉ መረጃዎች እና ቅድመ ሁኔታዎች</strong></li>
+                            </ul>
+                            <ol style="margin-bottom:auto">
+                                @foreach (var Service in item.ServiceRequirements)
+                                {
+                                    <li style="margin-left:5%"><i>&nbsp;@Service.ServiceRequirementName</i></li>
+                                }
+                            </ol>
+                            <ul style="list-style: none; margin-bottom:auto">
+                                <li class="card-text">መ)&nbsp;<strong>አገልግሎቱን ለመጨረስ የሚወስደው ጊዜ</strong>&nbsp;:&nbsp; <i><u> @item.ServiceTime.ServiceTimeInMinutes </u>(ደንበኛው ጥራት ያለው መረጃ ካያያዙ)</i></li>
+                            </ul>
+                            <div class="float-right text-md">
+                                <a href="#" class="btn btn-primary btn-md"> ያመልክቱ</a>
+                                <button id="delete" class="btn btn-danger btn-md glyphicon glyphicon-trash pull-right deleteMajorReqs" data-val-mainServiceId="@item.MainServiceId">ይሰርዙ</button>
+                                <button id="btnEdit" class="btn btn-warning btn-md pull-left btnEdit" data-val-mainserviceid="@item.MainServiceId">እርማት</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        else
+        {
+            <br />
+            <div class="panel panel-body">
+                <div class="row text-center">
+                    <p class="alert-info">
+                        No Data Found..
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
+    <button style="margin-right:10px" class="btn btn-block btn-outline-secondary btn-sm" id="btnNewItem" onclick="addNewService()">
+        አዲስ አገልግሎት
+    </button>
+    <div class="panel panel-footer">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true })
+    </div>
+</div>
+
+
+
+@*Bootstrap Model*@
+<div class="modal fade text-sm" id="newServiceModal">
+    <div class="modal-dialog modal-xl" style=" width: 80% !important;">
+        <div class="modal-content">
+            <div class="modal-header bg-gradient-navy">
+                <h5>በተገልጋዮች ቻርተር መሰረት የአገልግሎቶች መመዝገቢያ</h5>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+            </div>
+            <form id="NewServiceForm">
+                <div class="modal-body">
+                    <h6 style="color:#ff6347">ዋና ዋና አገልግሎቶች</h6>
+                    <hr />
+                    <div class="form-horizontal">
+                        <input type="hidden" id="MainServiceId" />
+                        <div class="row m-sm-2">
+                            <label class="control-label col-md-2 text-left">
+                                የአገልገሎት መጠሪያ
+                            </label>
+                            <div class="col-sm-10">
+                                <input type="text" id="mainservicename" name="mainservicename" placeholder="በተገልጋዮች ቻርተር  መሰረት ዋና አገልግሎቱን ይመዝግቡ" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row m-sm-2">
+                            <label class="control-label col-sm-2  text-left">
+                                የሚወስደው ጊዜ
+                            </label>
+                            <div class="col-sm-10">
+                                <select id="servicetimeid" name="servicetimeid" class="form-control"></select>
+                            </div>
+                        </div>
+                        <div class="row m-sm-2">
+                            <label class="control-label col-sm-3 text-left">
+                                አገልግሎቱን የሚሰጠው የስራ ክፍል
+                            </label>
+                            <div class="col-sm-9">
+                                <select id="roleid" name="roleid" class="form-control"></select>
+                            </div>
+                        </div>
+                        <h6 style="margin-top:10px ;color:#ff6347">
+                            ለአገልግሎቶቱን ለማግኘት የሚያስፈልገው ቅድመ ሁኔታ
+                        </h6>
+                        <hr />
+                        <div class="form-horizontal">
+                            <input type="hidden" id="ServiceRequirementId" />
+                            <div class="row m-sm-2">
+                                <label class="control-label col-md-2 text-left">
+                                    ቅድመ ሁኔታ ይመዝግቡ
+                                </label>
+                                <div class="col-sm-10">
+                                    <input type="text" id="servicerequirementname" name="servicerequirementname" placeholder="በተገልጋዮች ቻርተር  መሰረት አገልግሎቱን ለመስጠት ከግብር ከፋይየሚጠበቁ መረጃዎችን ይመዝግኑ" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row m-sm-2 float-right">
+                            <a href="#" id="addToList" class="btn btn-primary float-right">Add To List</a>
+                            <a href="#" id="updateList" class="btn btn-success" style="display: none">Update</a>
+                        </div>
+
+                        @*Details Part*@
+                        <table id="detailsTable" class="table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 70%">አገልግሎቱን ለመስጠት ከግብር ከፋይ የሚጠበቁ መረጃዎች እና ቅድመ ሁኔታዎች</th>
+                                    <th style="width: 30%">ድርጊቶች</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success" data-dismiss="modal" id="saveService">Save Major Services</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        //
+        var tableRowIndex = -1;
+        var editMode;
+        $(document).ready(function () {
+            $('#btnNewItem').click(function () {
+                LoadRoles($('#roleid'));
+                LoadServiceTime($('#servicetimeid'));
+            });
+        })
+        function addNewService() {
+            $("#mainservicename").val('');
+            $("#servicetimeid").val('');
+            $("#roleid").val('');
+            clearItem();
+            $("#detailsTable tbody tr").remove();
+            $("#newServiceModal").modal();
+        }
+
+        //-----------------------------------------------Roles
+        var AspNetRoles = []
+        //fetch from database
+        function LoadRoles(element) {
+            if (AspNetRoles.length == 0) {
+                //ajax function for fetch data
+                $.ajax({
+                    type: "GET",
+                    url: '/Mainservings/LoadRoles',
+                    success: function (data) {
+                        AspNetRoles = data;
+                        //render
+                        renderAspNetRoles(element);
+                    }
+                })
+            }
+            else {
+                //render to the element
+                renderAspNetRoles(element);
+            }
+        }
+        function renderAspNetRoles(element) {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('-- የስራ ክፍል ይምረጡ --'));
+            $.each(AspNetRoles, function (index, item) {
+                $ele.append($('<option/>').val(item.value).text(item.text));
+            })
+        }
+
+        //-----------------------------------------------ServiceTime
+        var ServiceTime = []
+        //fetch from database
+        function LoadServiceTime(element) {
+            if (ServiceTime.length == 0) {
+                //ajax function for fetch data
+                $.ajax({
+                    type: "GET",
+                    url: '/Mainservings/LoadServiceTime',
+                    success: function (data) {
+                        ServiceTime = data;
+                        //render
+                        renderServiceTime(element);
+                    }
+                })
+            }
+            else {
+                //render to the element
+                renderServiceTime(element);
+            }
+        }
+        function renderServiceTime(element) {
+            var $ele = $(element);
+            $ele.empty();
+            $ele.append($('<option />').val('0').text('-- የሚወስደውን ጊዜ ይምረጡ --'));
+            $.each(ServiceTime, function (index, item) {
+                $ele.append($('<option/>').val(item.value).text(item.text));
+            })
+        }
+
+        // Add To List
+        $("#addToList").click(function (e) {
+            e.preventDefault();
+            editMode = false;
+            if ($.trim($("#servicerequirementname").val()) == "") return;
+            var servicerequirementname = $("#servicerequirementname").val(),
+                detailsTableBody = $("#detailsTable tbody");
+            var productItem = '<tr><td style="display:none"></td><td>' +
+                servicerequirementname +
+                '</td><td><a data-itemId="0" href="#" class="deleteItem">Remove</a></tr>';
+            detailsTableBody.append(productItem);
+            clearItem();
+        });
+        // Clear Item
+        function clearItem() {
+            $("#servicerequirementname").val('');
+        }
+
+        // Remove item from the list
+        $(document).on('click', 'a.deleteItem', function (e) {
+            e.preventDefault();
+            var $self = $(this);
+            if ($self.attr('data-itemId') == "0") {
+                $self.parents('tr').css("background-color", "#ff6347").fadeOut(800,
+                    function () {
+                        $self.remove();
+                    })
+            }
+        })
+        // Save Service //
+        function saveService(data) {
+            return $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                type: 'POST',
+                url: '/MainServings/SaveService',
+                data: data,
+                success: function (result) {
+                    $("#newServiceModal").hide();
+                    location.reload();
+                },
+            });
+        }
+        // When Clicking the save button //
+        $("#saveService").click(function (e) {
+            e.preventDefault();
+            var ReqArr = [];
+            ReqArr.length = 0;
+            $.each($("#detailsTable tbody tr"),
+                function () {
+                    ReqArr.push({
+                        ServiceRequirementId: $(this).find('td:eq(0)').html(),
+                        ServiceRequirementName: $(this).find('td:eq(1)').html(),
+                    });
+                })
+            var data = JSON.stringify({ // to convert the object to JSON format
+                id: $("#MainServiceId").val() == "" ? "" : $("#MainServiceId").val(),
+                mainservicename: $("#mainservicename").val(),
+                servicetimeid: $("#servicetimeid").val(),
+                roleid: $("#roleid").val(),
+                reqs: ReqArr
+            });
+            console.log(data);
+            $.when(saveService(data)).then(function (respose) {
+                console.log(respose);
+            }).fail(function (err) {
+                console.log(err);
+            })
+        })
+        //----------- Edit Part ------------//
+        // Loading data from the server to edit
+
+        $(".btnEdit").click(function (e) {
+            editMode = true;
+
+            LoadServiceTime($('#servicetimeid'));
+            LoadRoles($('#roleid'));
+
+
+            $("#addToList").removeAttr('style', 'display:none');
+            $("#updateList").attr('style', 'display:none');
+
+            $("#mainservicename").val('');
+            $("#roleid").val('');
+            $("#servicetimeid").val('');
+            //clearItem();
+            $("#detailsTable tbody tr").remove();
+
+            e.preventDefault();
+
+            var $btnEdit = $(this);
+
+            var mainserviceid = $btnEdit.attr("data-val-mainserviceid").toString();
+            console.log(mainserviceid.toString());
+
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { mainserviceid: $btnEdit.attr("data-val-mainserviceid").toString() },
+                url: '/MainServings/GetServiceDetails/' + mainserviceid,
+                success: function (result) {
+                    console.log(result);
+                    console.log(result.Customer);
+                    $("#roleid").val(result.MainService.roleid);
+                    $("#MainServiceId").val(result.MainService.MainServiceId);
+                    $("#mainservicename").val(result.MainService.MainServiceName);
+                    $("#servicetimeid").val(result.MainService.ServiceTimeId);
+
+
+                    var detailsTableBody = $("#detailsTable tbody");
+                    $.each(result.ServiceRequirements,
+                        function (index, item) {
+                            var productItem = '<tr><td style="display:none">' +
+                                item.ServiceRequirementId +
+                                '</td><td>' +
+                                item.ServiceRequirementName +
+                                '</td><td><a href="#" class="btn btn-primary mr-1 btn-sm ServiceEdit" data-val-editServiceRequirementId="' +
+                                item.ServiceRequirementId +
+                                '">Edit</a><a href="#" class="btn btn-danger btn-sm ServiceDelete " tooltip="Delete" data-val-delServiceRequirementId="' +
+                                item.ServiceRequirementId +
+                                '">Delete</a></td></tr>';
+                            detailsTableBody.append(productItem);
+                        })
+                    $("#newServiceModal").modal();
+                },
+            })
+        })
+        // Click Edit icon  on the modal view//
+        $(document).on("click", "a.ServiceEdit", function (e) {
+            $("#addToList").attr('style', 'display:none');
+            $("#updateList").removeAttr('style', 'display:none');
+            tableRowIndex = -1;
+            e.preventDefault();
+            $("#ServiceRequirementId").val();
+            clearItem();
+
+            tableRowIndex = $(this).parent().parents('tr').index();
+            var servicerequirementid = $(this).parents('tr').find('td:eq(0)').html();
+            $("#servicerequirementname").val($(this).parents('tr').find('td:eq(1)').html());
+            console.log("Service Requirement Id: " + servicerequirementid);
+            $("#ServiceRequirementId").val(servicerequirementid);
+        })
+        // table row data update //
+        $("#updateList").click(function (e) {
+            var tableRow = $("#detailsTable tbody").find("tr:eq('" + tableRowIndex + "')");
+            tableRow.find('td:eq(1)').html($("#servicerequirementname").val());
+            $("#ServiceRequirementId").val('');
+            tableRowIndex = -1;
+            $("#addToList").removeAttr('style', 'display:none');
+            $("#updateList").attr('style', 'display:none');
+            clearItem();
+        })
+        // Delete an Order
+
+        function deleteService(servicerequirementid, ServiceItemRow) {
+            return $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                type: 'POST',
+                url: '/MainServings/DeleteService',
+                data: JSON.stringify({ servicerequirementid: servicerequirementid }),
+                success: function (result) {
+                    console.log(result);
+                    $("#detailsTable tbody").find('tr:eq("' + ServiceItemRow + '")').css("background-color", "#ff6347")
+                        .fadeOut(800,
+                            function () {
+                                $("#detailsTable tbody").find('tr:eq("' + ServiceItemRow + '")').remove();
+                            });
+                },
+
+            });
+        }
+        $(document).on("click", "a.ServiceDelete", function () {
+            var $self = $(this);
+            var servicerequirementid = $self.parents('tr').find('td:eq(0)').html();
+            var ServiceItemRow = $self.parents('tr').index();
+            $.when(deleteService(servicerequirementid, ServiceItemRow)).then(function (response) {
+                console.log(response);
+            }).fail(function (err) {
+                console.log(err);
+            })
+        })
+        $('#newServiceModal').on('hidden.bs.modal', function () {
+            if (editMode == true) {
+                location.reload();
+            }
+        })
+        $(document).on("click", ".deleteMajorReqs", function () {
+            var mainserviceid = $(this).attr("data-val-mainServiceId");
+
+            $.when(deleteMajorReqs(mainserviceid)).then(function (response) {
+                console.log(response);
+            }).fail(function (err) {
+                console.log(err);
+            })
+
+        });
+        function deleteMajorReqs(mainserviceid) {
+            return $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                type: 'POST',
+                url: '/MainServings/DeleteCustomer',
+                data: JSON.stringify({ mainserviceid: mainserviceid }),
+                success: function (result) {
+                    location.reload();
+                },
+            })
+        }
+    </script>
+}
+

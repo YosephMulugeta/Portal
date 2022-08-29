@@ -1,0 +1,43 @@
+﻿@model PoralAARB.Models.Department
+
+@{
+    ViewBag.Title = "Department";
+}
+<br />
+<h4 class="text-center text-info">Department Registration</h4>
+<br />
+
+<style>
+    .error {
+        color: red;
+    }
+</style>
+
+@using (Html.BeginForm("AddDepartment", "Departments", FormMethod.Post))
+{
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row m-md-2">
+                @Html.HiddenFor(x => x.Id)
+                <label class="control-label col-md-2 text-right">
+                    Department Code:
+                </label>
+                <div class="col-md-3">
+                    @Html.ValidationMessageFor(x => x.DepartmentId, "", new { @class = "error" })
+                    @Html.TextBoxFor(x => x.DepartmentId, new { @Type = "number", @class = "form-control", @placeholder = "Enter Code of the Department" })
+                </div>
+                <label class="control-label col-md-2 text-right">
+                    Department Name:
+                </label>
+                <div class="col-md-3">
+                    @Html.ValidationMessageFor(x => x.DepartmentName, "", new { @class = "error" })
+                    @Html.TextBoxFor(x => x.DepartmentName, new { @class = "form-control", @placeholder = "Enter Name of the Department" })
+                </div>
+            </div>
+            <div class="row col-7 float-right">
+                <button type="submit" class="btn btn-info float-right">Submit</button>
+            </div>
+        </div>
+</section>
+        }
+

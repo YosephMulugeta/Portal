@@ -1,0 +1,72 @@
+﻿@model  List<PoralAARB.Models.Branch>
+@{
+    ViewBag.Title = "BranchList";
+}
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row col-7">
+            <button class="text-black btn-md float-right">
+                <ol class="breadcrumb float-sm-right">
+                    <li> @Html.ActionLink("Create New Branch", "Branches")</li>
+                </ol>
+            </button>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">List of Branches</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Branch Code</th>
+                                    <th>Branch Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.BranchId</td>
+                                    <td>@item.BranchName</td>
+                                    <td>
+                                        <a href="@Url.Action("Branches",new {item.Id, item.BranchId, item.BranchName})"><i class="text-warning">Edit</i></a>
+                                        <a href="@Url.Action("Delete",new { id=@item.Id})"><i class="text-danger">Delete</i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section scripts{
+    <script>
+        
+       $(document).ready(function () {
+     $("#example1").DataTable({
+    dom: 'Bfrtip',
+    "paging": true,
+      ng: false,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+            })
+    </script>
+    }
+
